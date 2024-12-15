@@ -1,4 +1,4 @@
-package com.fhr.common.aspect;
+package com.fhr.train.common.aspect;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.support.spring.PropertyPreFilters;
@@ -21,28 +21,36 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
+ * AOP记录请求日志
+ *
  * @author FHR
  * @create 2024/12/15 16:23
  */
 @Aspect
 @Component
 public class LogAspect {
-    private static final Logger LOG =  LoggerFactory.getLogger(LogAspect.class);
+    private static final Logger LOG = LoggerFactory.getLogger(LogAspect.class);
+
+    public LogAspect() {
+        LOG.info("LogAspect init...");
+    }
 
     /**
      * 定义切点
      */
     @Pointcut("execution(public * com.fhr..*Controller.*(..))")
-    public void controllerPointcut() {}
+    public void controllerPointcut() {
+    }
 
     /**
      * 前置通知
+     *
      * @param joinPoint
      */
     @Before("controllerPointcut()")
     public void doBefore(JoinPoint joinPoint) {
         //增加日志流水号
-        MDC.put("LOG_ID",System.currentTimeMillis()+ "");
+        MDC.put("LOG_ID", System.currentTimeMillis() + "");
 
         //打印请求信息
         // 开始打印请求日志
@@ -52,7 +60,7 @@ public class LogAspect {
         String name = signature.getName();
 
         // 打印请求信息
-        LOG.info("------------- 请求开始 -------------");
+        LOG.info("------------- 开始 -------------");
         LOG.info("请求地址: {} {}", request.getRequestURL().toString(), request.getMethod());
         LOG.info("类名方法: {}.{}", signature.getDeclaringTypeName(), name);
         LOG.info("远程地址: {}", request.getRemoteAddr());

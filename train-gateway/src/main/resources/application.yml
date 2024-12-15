@@ -1,0 +1,14 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: train-gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: train-member
+            uri: http://localhost:9001 #lb://train-member
+            predicates:
+              - Path=/member/**
+

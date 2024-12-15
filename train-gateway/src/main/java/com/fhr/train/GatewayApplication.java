@@ -1,6 +1,5 @@
-package com.fhr.train.member;
+package com.fhr.train;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -9,16 +8,15 @@ import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * @author FHR
- * @create 2024/12/15 14:51
+ * @create 2024/12/15 17:01
  */
 @SpringBootApplication(scanBasePackages = "com.fhr.train")
-@MapperScan("com.fhr.train.member.mapper")
-public class MemberApplication {
-   private static final Logger LOG =  LoggerFactory.getLogger(MemberApplication.class);
+public class GatewayApplication {
+    private static final Logger LOG =  LoggerFactory.getLogger(GatewayApplication.class);
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(MemberApplication.class);
+        SpringApplication app = new SpringApplication(GatewayApplication.class);
         ConfigurableEnvironment environment = app.run(args).getEnvironment();
-        LOG.info("会员项目启动成功");
+        LOG.info("网关项目启动成功");
         LOG.info("接口地址: \thttp://localhost:{}/doc.html", environment.getProperty("server.port"));
     }
 }
