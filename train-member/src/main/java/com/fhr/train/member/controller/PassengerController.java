@@ -13,8 +13,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 /**
  * @author FHR
  * @create 2024/12/16 12:05
@@ -29,6 +27,11 @@ public class PassengerController {
     @PostMapping
     public Result<Void> addPassenger(@Valid @RequestBody PassengerSaveDto passengerSaveDto) {
         passengerService.addPassenger(passengerSaveDto);
+        return Result.success();
+    }
+    @PutMapping
+    public Result<Void> modifyPassenger(@Valid @RequestBody PassengerSaveDto passengerSaveDto) {
+        passengerService.modifyPassenger(passengerSaveDto);
         return Result.success();
     }
 

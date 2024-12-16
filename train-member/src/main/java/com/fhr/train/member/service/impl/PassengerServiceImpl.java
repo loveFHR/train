@@ -60,4 +60,12 @@ public class PassengerServiceImpl extends ServiceImpl<PassengerMapper, Passenger
 
         return new PageResponse<>(total,passengerList);
     }
+
+    @Override
+    public void modifyPassenger(PassengerSaveDto passengerSaveDto) {
+        Passenger passenger = new Passenger();
+        BeanUtils.copyProperties(passengerSaveDto, passenger);
+        passenger.setUpdateTime(LocalDateTime.now());
+        passengerMapper.updateById(passenger);
+    }
 }

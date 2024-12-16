@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class PassengerQueryVo {
     @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long memberId;
     private String name;
     private String idCard;

@@ -1,5 +1,6 @@
 package com.fhr.train.member.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +25,8 @@ public class PassengerSaveDto {
     @Schema(description = "旅客类型")
     @NotBlank(message = "【旅客类型】不能为空")
     private String type;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GTM+8")
     private LocalDateTime createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GTM+8")
     private LocalDateTime updateTime;
 }

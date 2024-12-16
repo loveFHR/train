@@ -1,12 +1,20 @@
 <script setup>
 import {onMounted, ref} from 'vue';
-import {PassengerAddService, PassengerListService} from "@/api/passenger.js"
+import {
+  PassengerAddService,
+  PassengerListService,
+  PassengerModifyService
+} from "@/api/passenger.js"
 import {notification} from "ant-design-vue";
 
 const passenger = ref({
-  name: '',
-  idCard: '',
-  type: ''
+  id:undefined,
+  name: undefined,
+  idCard: undefined,
+  type: undefined,
+  memberId:undefined,
+  createTime:undefined,
+  updateTime:undefined
 })
 const passengerForm = ref([])
 const columns = ref([
@@ -23,6 +31,9 @@ const columns = ref([
     title: '类型',
     dataIndex: 'type',
     key: 'type' //type === 1 ? '成人' : (type === 2 ? '儿童' : '学生')
+  }, {
+   title: '操作',
+    dataIndex: 'operation'
   }
 ])
 const pagination = ref({
@@ -58,41 +69,56 @@ const handleFormChange = (e) => {
   getPassengerList()
 }
 const open = ref(false);
-const showModal = () => {
+const onAdd = () => {
   //清空数据
-  passenger.value = {
-    name: '',
-    idCard: '',
-    type: ''
-  }
+  passenger.value = {}
   open.value = true;
 };
 const handleOk = async e => {
-  const res = await PassengerAddService(passenger.value)
+  let res
+  if (passenger.value){
+    res = await PassengerModifyService(passenger.value)
+  }else {
+    res = await PassengerAddService(passenger.value)
+  }
   if (res.code === 200) {
-    notification.success({description: "添加成功！"})
+    notification.success({description: "操作成功！"})
     open.value = false;
     await getPassengerList()
   } else {
     notification.error({description: res.data})
   }
 };
-
+const onEdit = (record) => {
+  //如果直接把record赋值给passenger.value，那么他们指向同一个地址
+  //在表单修改数据时，表格的数据也在同步修改，采用JSON转换的方式创建新的对象进行赋值
+  const row = JSON.parse(JSON.stringify(record))
+  passenger.value = row
+  open.value = true
+}
 </script>
 
 <template>
   <div>
     <p>
-      <a-button type="primary" @click="showModal">新增</a-button>
+      <a-button type="primary" @click="onAdd">新增</a-button>
     </p>
     <div>
       <a-table :dataSource="passengerForm" :columns="columns"
                :pagination="pagination"
                @change="handleFormChange"
-               :loading="loading"/>
+               :loading="loading">
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex === 'operation'">
+            <a-space>
+              <a @click="onEdit(record)">编辑</a>
+            </a-space>
+          </template>
+        </template>
+      </a-table>
     </div>
-    <a-modal v-model:open="open" title="新增乘客" @ok="handleOk"
-             ok-text="添加" cancel-text="取消">
+    <a-modal v-model:open="open" title="乘车人" @ok="handleOk"
+             ok-text="确定" cancel-text="取消">
       <a-form :model="passenger" :label-col="{span:4}" :wrapper-col="{ span: 16 }">
         <a-form-item label="姓名">
           <a-input v-model:value="passenger.name"></a-input>

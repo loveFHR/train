@@ -17,4 +17,6 @@ public interface PassengerService extends IService<Passenger> {
     void addPassenger(PassengerSaveDto passengerSaveDto);
 
     PageResponse<PassengerQueryVo> queryList(PassengerQueryDto passengerQueryDto);
+
+    void modifyPassenger(PassengerSaveDto passengerSaveDto);
 }
