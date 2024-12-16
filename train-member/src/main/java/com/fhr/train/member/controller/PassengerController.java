@@ -1,10 +1,16 @@
 package com.fhr.train.member.controller;
 
+import com.fhr.train.common.response.Result;
+import com.fhr.train.member.model.dto.PassengerSaveDto;
+import com.fhr.train.member.model.entity.Passenger;
 import com.fhr.train.member.service.PassengerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author FHR
@@ -16,4 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class PassengerController {
     @Autowired
     private PassengerService passengerService;
+
+    @PostMapping
+    public Result<Void> addPassenger(@Valid @RequestBody PassengerSaveDto passengerSaveDto) {
+        passengerService.addPassenger(passengerSaveDto);
+        return Result.success();
+    }
 }

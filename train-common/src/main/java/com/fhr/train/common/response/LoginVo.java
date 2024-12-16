@@ -1,4 +1,4 @@
-package com.fhr.train.member.model.vo;
+package com.fhr.train.common.response;
 
 import lombok.Data;
 

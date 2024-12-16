@@ -1,6 +1,5 @@
 package com.fhr.train.member.service.impl;
 
-import cn.hutool.jwt.JWTUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.fhr.train.common.exception.BusinessException;
@@ -12,15 +11,12 @@ import com.fhr.train.member.model.dto.RegisterDto;
 import com.fhr.train.member.model.dto.SendCodeDto;
 import com.fhr.train.member.model.entity.Member;
 import com.fhr.train.member.mapper.MemberMapper;
-import com.fhr.train.member.model.vo.LoginVo;
+import com.fhr.train.common.response.LoginVo;
 import com.fhr.train.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author FHR

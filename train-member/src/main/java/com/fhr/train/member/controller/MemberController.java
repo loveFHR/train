@@ -4,7 +4,7 @@ import com.fhr.train.common.response.Result;
 import com.fhr.train.member.model.dto.LoginDto;
 import com.fhr.train.member.model.dto.RegisterDto;
 import com.fhr.train.member.model.dto.SendCodeDto;
-import com.fhr.train.member.model.vo.LoginVo;
+import com.fhr.train.common.response.LoginVo;
 import com.fhr.train.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
