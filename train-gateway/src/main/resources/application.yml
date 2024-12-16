@@ -5,10 +5,23 @@ spring:
     name: train-gateway
   cloud:
     gateway:
-      mvc:
-        routes:
-          - id: train-member
-            uri: http://localhost:9001 #lb://train-member
-            predicates:
-              - Path=/member/**
+      routes:
+        - id: train-member
+          uri: http://localhost:9001 #lb://train-member
+          predicates:
+            - Path=/member/**
 
+      # 跨域
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            # 允许请求的来源
+            allowedOriginPatterns: "*"
+            # 允许请求中携带的头信息
+            allowedHeaders: "*"
+            # 运行跨域的请求方式
+            allowedMethods: "*"
+            # 是否允许携带cookie
+            allow-credentials: true
+            # 跨域检测的有效期,单位s
+            maxAge: 36000
