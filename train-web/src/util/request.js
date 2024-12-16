@@ -1,5 +1,7 @@
 import axios from "axios";
 import router from '@/router'
+import {useMemberStore} from '@/stores/member.js'
+import {notification} from "ant-design-vue";
 
 const baseURL = 'http://localhost:9000'
 
@@ -12,10 +14,9 @@ const instance = axios.create({
 instance.interceptors.request.use(
   (config) => {
     //  2. 携带token
-    const userStore = useUserStore()
-    if(userStore.token) {
-
-      config.headers.Authorization = userStore.token
+    const memberStore = useMemberStore()
+    if(memberStore.member.token) {
+      config.headers.Authorization = memberStore.member.token
     }
     return config
   },
@@ -26,20 +27,21 @@ instance.interceptors.response.use(
   (res) => {
 
     // 4. 摘取核心响应数据
-    console.log('请求参数',res)
-    if (res.data.code === 1) {
+    // console.log('请求参数',res)
+    if (res.data.code === 200) {
       return res.data
     }
     // 3. 处理业务失败
-    console.log(res.data.msg || '服务异常')
+    notification.error(res.data.msg || '服务异常')
     return Promise.reject(res)
   },
   (err) => {
     //  5. 处理401错误
     if (err.response?.data.status === 401) {
+      console.log('401,应该拦截到登录页')
       router.push('/login')
     }
-    console.log(err.response.data.msg || '服务异常')
+    notification.error({description: err.message || '服务异常'})
     return Promise.reject(err)
   }
 )

@@ -11,7 +11,21 @@ const router = createRouter({
     },
     {
       path: '/',
-      component: () => import('../views/Layout.vue')
+      component: () => import('../views/Layout.vue'),
+      children: [
+        {
+          path: '/passenger',
+          component: () => import('../views/layout/Passenger.vue')
+        },
+        {
+          path: 'welcome',
+          component: () => import('../views/layout/WelcomePage.vue')
+        }
+      ]
+    },
+    {
+      path: '',
+      redirect: '/welcome '
     }
   ],
 })

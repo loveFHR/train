@@ -2,24 +2,18 @@
 import LayoutHeader from "@/components/LayoutHeader.vue";
 import LayoutSider from "@/components/LayoutSider.vue";
 
-
 </script>
 
 <template>
-  <a-layout id="components-layout-demo-top-side-2">
-    <layout-header/>
+  <a-layout>
+    <layout-header></layout-header>
     <a-layout>
-      <layout-sider/>
+      <layout-sider></layout-sider>
       <a-layout style="padding: 0 24px 24px">
-        <a-breadcrumb style="margin: 16px 0">
-          <a-breadcrumb-item>Home</a-breadcrumb-item>
-          <a-breadcrumb-item>List</a-breadcrumb-item>
-          <a-breadcrumb-item>App</a-breadcrumb-item>
-        </a-breadcrumb>
         <a-layout-content
           :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
         >
-          Content
+          <router-view></router-view>
         </a-layout-content>
       </a-layout>
     </a-layout>

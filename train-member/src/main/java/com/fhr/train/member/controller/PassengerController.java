@@ -1,16 +1,19 @@
 package com.fhr.train.member.controller;
 
+import com.fhr.train.common.context.LoginMemberContext;
+import com.fhr.train.common.response.PageResponse;
 import com.fhr.train.common.response.Result;
+import com.fhr.train.member.model.dto.PassengerQueryDto;
 import com.fhr.train.member.model.dto.PassengerSaveDto;
 import com.fhr.train.member.model.entity.Passenger;
+import com.fhr.train.member.model.vo.PassengerQueryVo;
 import com.fhr.train.member.service.PassengerService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author FHR
@@ -27,5 +30,12 @@ public class PassengerController {
     public Result<Void> addPassenger(@Valid @RequestBody PassengerSaveDto passengerSaveDto) {
         passengerService.addPassenger(passengerSaveDto);
         return Result.success();
+    }
+
+    @GetMapping("query/list")
+    public Result<PageResponse<PassengerQueryVo>> queryList(@Valid PassengerQueryDto passengerQueryDto) {
+        passengerQueryDto.setMemberId(LoginMemberContext.getMemberId());
+        PageResponse<PassengerQueryVo> res = passengerService.queryList(passengerQueryDto);
+        return Result.success(res);
     }
 }

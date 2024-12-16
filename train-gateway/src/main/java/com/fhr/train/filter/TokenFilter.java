@@ -27,14 +27,14 @@ public class TokenFilter implements GlobalFilter, Ordered {
         if (path.contains("/admin")
                 || path.contains("/hello")
                 || path.contains("/member/login")
-                || path.contains("/member/send-code")) {
+                || path.contains("/member/send/code")) {
             LOG.info("不需要登录验证：{}", path);
             return chain.filter(exchange);
         } else {
             LOG.info("需要登录验证：{}", path);
         }
         // 获取header的token参数
-        String token = exchange.getRequest().getHeaders().getFirst("token");
+        String token = exchange.getRequest().getHeaders().getFirst("Authorization");
         LOG.info("会员登录验证开始，token：{}", token);
         if (token == null || token.isEmpty()) {
             LOG.info( "token为空，请求被拦截" );

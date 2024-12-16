@@ -1,7 +1,9 @@
 <template>
   <a-row class="login">
     <a-col :span="8" :offset="8" class="login-main">
-      <h1 style="text-align: center"><rocket-two-tone />&nbsp;仿12306售票系统</h1>
+      <h1 style="text-align: center">
+        <rocket-two-tone/>&nbsp;仿12306售票系统
+      </h1>
       <a-form
         :model="loginForm"
         name="basic"
@@ -38,48 +40,44 @@
 </template>
 
 <script>
-import { defineComponent, reactive } from 'vue';
-import axios from 'axios';
-import { notification } from 'ant-design-vue';
-import { useRouter } from 'vue-router'
+import {defineComponent, ref} from 'vue';
+import {notification} from 'ant-design-vue';
+import {useRouter} from 'vue-router'
 import {useMemberStore} from "@/stores/member.js";
+import {memberSendCodeService, memberLoginService} from "@/api/member.js";
 
 export default defineComponent({
   setup() {
     const router = useRouter();
     const memberStore = useMemberStore()
 
-    const loginForm = reactive({
+    const loginForm = ref({
       mobile: '13512341234',
       code: '',
     });
 
-    const sendCode = () => {
-      axios.post("/member/send/code", {
-        mobile: loginForm.mobile
-      }).then(response => {
-        let data = response.data;
-        if (data.code === 200) {
-          notification.success({ description: '发送验证码成功！' });
-          loginForm.code = "123456";
-        } else {
-          notification.error({ description: data.msg });
-        }
-      });
+    const sendCode = async () => {
+      const res = await memberSendCodeService({
+        mobile: loginForm.value.mobile
+      })
+      if (res.code === 200) {
+        notification.success({description: '发送验证码成功！'});
+        loginForm.value.code = "123456";
+      } else {
+        notification.error({description: res.msg});
+      }
     };
 
-    const login = () => {
-      axios.post("/member/login", loginForm).then((response) => {
-        let data = response.data;
-        if (data.code === 200) {
-          notification.success({ description: '登录成功！' });
-          memberStore.setMember(data.data)
-          // 登录成功，跳到控台主页
-          router.push("/");
-        } else {
-          notification.error({ description: data.msg });
-        }
-      })
+    const login = async () => {
+      const res = await memberLoginService(loginForm.value)
+      if (res.code === 200) {
+        notification.success({description: '登录成功！'});
+        memberStore.setMember(res.data)
+        // 登录成功，跳到控台主页
+        await router.push("/welcome");
+      } else {
+        notification.error({description: res.msg});
+      }
     };
 
     return {
@@ -96,6 +94,7 @@ export default defineComponent({
   font-size: 25px;
   font-weight: bold;
 }
+
 .login-main {
   margin-top: 100px;
   padding: 30px 30px 20px;
