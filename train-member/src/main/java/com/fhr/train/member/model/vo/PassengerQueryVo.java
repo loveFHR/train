@@ -1,7 +1,9 @@
 package com.fhr.train.member.model.vo;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fhr.train.common.response.PageResponse;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -13,6 +15,7 @@ import java.time.LocalDateTime;
  */
 @Data
 public class PassengerQueryVo {
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
     private Long memberId;
     private String name;

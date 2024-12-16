@@ -1,6 +1,6 @@
 <script setup>
-import {ref} from 'vue';
-import {PassengerAddService} from "@/api/passenger.js"
+import {onMounted, ref} from 'vue';
+import {PassengerAddService, PassengerListService} from "@/api/passenger.js"
 import {notification} from "ant-design-vue";
 
 const passenger = ref({
@@ -8,7 +8,55 @@ const passenger = ref({
   idCard: '',
   type: ''
 })
+const passengerForm = ref([])
+const columns = ref([
+  {
+    title: '姓名',
+    dataIndex: 'name',
+    key: 'name'
+  },
+  {
+    title: '身份证',
+    dataIndex: 'idCard',
+    key: 'idCard'
+  }, {
+    title: '类型',
+    dataIndex: 'type',
+    key: 'type' //type === 1 ? '成人' : (type === 2 ? '儿童' : '学生')
+  }
+])
+const pagination = ref({
+  total: 0,
+  current: 1,
+  pageSize: 2
+})
+const pageInfo = ref({
+  page: 1,
+  size: pagination.value.pageSize
+})
+const getPassengerList = async () => {
+  const res = await PassengerListService(pageInfo.value)
+  if (res.code === 200) {
+    passengerForm.value = res.data.list
+    pagination.value.total = res.data.total
+    pagination.value.current = pageInfo.value.page
+    loading.value = false
+  } else {
+    notification.error({description: res.msg})
+  }
+}
+const loading = ref(true)
+onMounted(() => {
+  getPassengerList()
+})
 
+const handleFormChange = (e) => {
+  pageInfo.value = {
+    page: e.current,
+    size: e.pageSize
+  }
+  getPassengerList()
+}
 const open = ref(false);
 const showModal = () => {
   //清空数据
@@ -24,6 +72,7 @@ const handleOk = async e => {
   if (res.code === 200) {
     notification.success({description: "添加成功！"})
     open.value = false;
+    await getPassengerList()
   } else {
     notification.error({description: res.data})
   }
@@ -33,7 +82,15 @@ const handleOk = async e => {
 
 <template>
   <div>
-    <a-button type="primary" @click="showModal">新增</a-button>
+    <p>
+      <a-button type="primary" @click="showModal">新增</a-button>
+    </p>
+    <div>
+      <a-table :dataSource="passengerForm" :columns="columns"
+               :pagination="pagination"
+               @change="handleFormChange"
+               :loading="loading"/>
+    </div>
     <a-modal v-model:open="open" title="新增乘客" @ok="handleOk"
              ok-text="添加" cancel-text="取消">
       <a-form :model="passenger" :label-col="{span:4}" :wrapper-col="{ span: 16 }">

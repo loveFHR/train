@@ -48,7 +48,8 @@ public class PassengerServiceImpl extends ServiceImpl<PassengerMapper, Passenger
 
         LambdaQueryWrapper<Passenger> wrapper = new LambdaQueryWrapper<>();
         if (passengerQueryDto.getMemberId() != null) {
-            wrapper.eq(Passenger::getMemberId, passengerQueryDto.getMemberId());
+            wrapper.eq(Passenger::getMemberId, passengerQueryDto.getMemberId())
+                    .orderByDesc(Passenger::getId);
         }
         log.info("查询页码：{}", passengerQueryDto.getPage());
         log.info("查询每页数：{}", passengerQueryDto.getSize());
