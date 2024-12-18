@@ -11,9 +11,17 @@ spring:
           predicates:
             - Path=/member/**
         - id: train-passenger
-          uri: http://localhost:9001 #lb://train-member
+          uri: http://localhost:9001
           predicates:
             - Path=/passenger/**
+        - id: train-business
+          uri: http://localhost:9002
+          predicates:
+            - Path=/business/**
+        - id: train-batch
+          uri: http://localhost:9003
+          predicates:
+            - Path=/batch/**
       # 跨域
       globalcors:
         cors-configurations:

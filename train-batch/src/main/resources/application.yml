@@ -1,0 +1,17 @@
+server:
+  port: 9003
+  servlet:
+    context-path: /batch
+spring:
+  application:
+    name: train-business
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.233.137:3307/train_batch?serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
