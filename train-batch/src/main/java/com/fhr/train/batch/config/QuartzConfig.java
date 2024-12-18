@@ -6,10 +6,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
+ * 演示使用，实际生产环境都是控制台操作
+ *
  * @author FHR
  * @create 2024/12/18 10:33
  */
-@Configuration
+//@Configuration
 public class QuartzConfig {
 
     /**
