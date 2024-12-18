@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
  * @author FHR
  * @create 2024/12/18 10:19
  */
-@Component
-@EnableScheduling
+//@Component
+//@EnableScheduling
 public class SpringBootTestJob {
 
     @Scheduled(cron = "0/5 * * * * ?")
