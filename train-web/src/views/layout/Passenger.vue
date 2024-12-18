@@ -3,18 +3,19 @@ import {onMounted, ref} from 'vue';
 import {
   PassengerAddService,
   PassengerListService,
-  PassengerModifyService
+  PassengerModifyService,
+  PassengerDeleteService
 } from "@/api/passenger.js"
 import {notification} from "ant-design-vue";
 
 const passenger = ref({
-  id:undefined,
+  id: undefined,
   name: undefined,
   idCard: undefined,
   type: undefined,
-  memberId:undefined,
-  createTime:undefined,
-  updateTime:undefined
+  memberId: undefined,
+  createTime: undefined,
+  updateTime: undefined
 })
 const passengerForm = ref([])
 const columns = ref([
@@ -32,10 +33,14 @@ const columns = ref([
     dataIndex: 'type',
     key: 'type' //type === 1 ? '成人' : (type === 2 ? '儿童' : '学生')
   }, {
-   title: '操作',
+    title: '操作',
     dataIndex: 'operation'
   }
 ])
+const TYPE_ENUM = ref(
+  [{type: '1', desc: '成人'},
+    {type: '2', desc: '儿童'},
+    {type: '3', desc: '学生'}])
 const pagination = ref({
   total: 0,
   current: 1,
@@ -76,9 +81,9 @@ const onAdd = () => {
 };
 const handleOk = async e => {
   let res
-  if (passenger.value){
+  if (passenger.value) {
     res = await PassengerModifyService(passenger.value)
-  }else {
+  } else {
     res = await PassengerAddService(passenger.value)
   }
   if (res.code === 200) {
@@ -96,6 +101,11 @@ const onEdit = (record) => {
   passenger.value = row
   open.value = true
 }
+const onDelete = async (record) => {
+  await PassengerDeleteService(record.id)
+  notification.success({description: "删除成功！"})
+  await getPassengerList()
+}
 </script>
 
 <template>
@@ -112,7 +122,20 @@ const onEdit = (record) => {
           <template v-if="column.dataIndex === 'operation'">
             <a-space>
               <a @click="onEdit(record)">编辑</a>
+              <a-popconfirm title="你确认删除吗？"
+                            @confirm="onDelete(record)"
+                            cancel-text="取消"
+                            ok-text="确定">
+                <a style="color: red">删除</a>
+              </a-popconfirm>
             </a-space>
+          </template>
+          <template v-else-if="column.dataIndex === 'type'">
+            <span v-for="item in TYPE_ENUM" :key="item.type">
+              <span v-if="item.type === record.type">
+                {{ item.desc}}
+              </span>
+            </span>
           </template>
         </template>
       </a-table>
@@ -128,9 +151,10 @@ const onEdit = (record) => {
         </a-form-item>
         <a-form-item label="类型">
           <a-select v-model:value="passenger.type">
-            <a-select-option value="1">成人</a-select-option>
-            <a-select-option value="2">儿童</a-select-option>
-            <a-select-option value="3">学生</a-select-option>
+            <a-select-option v-for="item in TYPE_ENUM"
+                             :key="item.type"
+                             :value="item.type">{{ item.desc }}
+            </a-select-option>
           </a-select>
         </a-form-item>
       </a-form>

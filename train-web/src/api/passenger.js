@@ -20,3 +20,9 @@ export const PassengerListService = (pageInfo) => {
     params:pageInfo
   })
 }
+
+/**
+ * 删除乘客
+ */
+export const PassengerDeleteService =
+  (id) => request.delete(`/passenger/${id}`)
