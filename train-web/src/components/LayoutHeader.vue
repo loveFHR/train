@@ -12,7 +12,11 @@ watch(()=> router.currentRoute.value.path,
 </script>
 <template>
   <a-layout-header class="header">
-    <div class="logo" />
+    <div class="logo" >
+      <router-link to="/welcome" style="color: white; font-size: 18px">
+        12306控台
+      </router-link>
+    </div>
     <a-menu
       v-model:selectedKeys="selectedKeys"
       theme="dark"
@@ -36,9 +40,9 @@ watch(()=> router.currentRoute.value.path,
 <style scoped>
 .logo {
   float: left;
-  width: 120px;
   height: 31px;
-  margin: 16px 24px 16px 0;
-  background: rgba(255, 255, 255, 0.3);
+  width: 150px;
+  color: white;
+  font-size: 20px;
 }
 </style>

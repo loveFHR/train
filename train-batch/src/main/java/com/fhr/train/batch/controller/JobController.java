@@ -144,14 +144,31 @@ public class JobController {
             scheduler.unscheduleJob(TriggerKey.triggerKey(jobClassName, jobGroupName));
             scheduler.deleteJob(JobKey.jobKey(jobClassName, jobGroupName));
         } catch (SchedulerException e) {
-            log.error("删除定时任务失败:" ,e);
+            log.error("删除定时任务失败:", e);
             Result.error("删除定时任务失败:调度异常");
         }
         log.info("删除定时任务结束");
         return Result.success();
     }
 
-    @GetMapping(value="query")
+    @PostMapping(value = "run")
+    @Operation(summary = "执行一次定时任务")
+    public Result<Void> handle(@RequestBody CronJobDto cronJobDto) {
+        String jobClassName = cronJobDto.getName();
+        String jobGroupName = cronJobDto.getGroup();
+        log.info("定时任务开始：{}，{}", jobClassName, jobGroupName);
+        try {
+            Scheduler scheduler = schedulerFactoryBean.getScheduler();
+            scheduler.triggerJob(JobKey.jobKey(jobClassName, jobGroupName));
+        } catch (SchedulerException e) {
+            log.error("执行定时任务失败:", e);
+            Result.error("执行定时任务失败:");
+        }
+        log.info("执行定时任务结束");
+        return Result.success();
+    }
+
+    @GetMapping(value = "query")
     @Operation(summary = "查看所有定时任务开始")
     public Result<List<CronJobVo>> query() {
         log.info("查看所有定时任务开始");
@@ -179,7 +196,7 @@ public class JobController {
 
             }
         } catch (SchedulerException e) {
-            log.error("查看定时任务失败:",e);
+            log.error("查看定时任务失败:", e);
             Result.error("查看定时任务失败:调度异常");
         }
         log.info("查看定时任务结束");

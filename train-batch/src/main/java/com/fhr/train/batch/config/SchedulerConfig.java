@@ -22,7 +22,7 @@ public class SchedulerConfig {
     private MyJobFactory myJobFactory;
 
     @Bean
-    public SchedulerFactoryBean schedulerFactoryBean(@Qualifier("dataSource") DataSource dataSource) throws IOException {
+    public SchedulerFactoryBean schedulerFactoryBean(@Qualifier("dataSource") DataSource dataSource){
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setDataSource(dataSource);
         factory.setJobFactory(myJobFactory);
